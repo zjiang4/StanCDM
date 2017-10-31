@@ -170,6 +170,7 @@ StanLCDM<-function(Qmatrix,savepath="C:\\Users\\zjiang17\\Desktop",savename="LCD
   
   Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
   Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,20)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
+  
   #Likelihood Stan code
   Likelihood<-'
   \n
