@@ -185,7 +185,7 @@ StanLCDM<-function(Qmatrix,savepath="C:\\Users\\zjiang17\\Desktop",savename="LCD
   contributionsC[iterc]=log(Vc[iterc])+sum(contributionsI);
   }
   target+=log_sum_exp(contributionsC);    
-  }
+  } 
   '
 
 
