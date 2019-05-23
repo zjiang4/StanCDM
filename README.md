@@ -25,7 +25,7 @@
 To install this package from source:
 
 1)  Users may need to install the
-    [rstan](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started) in order to execute the functions of StanDCM.
+    [rstan](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started) in order to execute the functions of StanDCM package.
 
 2)  Windows users should avoid using space when installing rstan.
 
