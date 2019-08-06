@@ -12,14 +12,15 @@
 ## Features of the package
 
   - Estimating log-linear cognitive diagnosis model (LCDM) and a variety of widely-used models subsumed
-    by the LCDM, including the DINA model, DINO model, additive-CDM (A-CDM), linear logistic model (LLM), reduced reparametrized unified model (RRUM), multiple-strategy DINA model
-    for dichotomous responses
+    by the LCDM, including the deterministic inputs, noisy “and” gate model (DINA; Haertel, 1989; Junker & Sijtsma, 2001; Macready & Dayton, 1977), the deterministic input, noisy “or” gate model (DINO;Templin & Henson, 2006), the deterministic “and” gate model (NIDA; Junker & Sijtsma, 2001), the compensatory reparameterized unified model (CRUM; Hartz, 2002) as well as the noncompensatory
+reduced reparameterized unified model (NCRUM;DiBello, Stout, & Roussos, 1995) for dichotomous responses
   - Specifying customized prior distributions for parameters
   - Computing can be achieved in parallel environments
-  - Estimating models within the LCDM model framework using
-    user-specified design matrix
-  - Estimating rating scale DCM for ordinal and nominal responses
-
+  - Estimating models within the LCDM model framework using user-specified design matrix
+  - Estimating rating scale DCM for ordinal responses
+  - Providing posterior predictive model checking (PPMC; Gelman, Meng, & Stern 1996), Watanabe-Akaike information criterion (WAIC; Watanabe, 2010) and leave-one-out cross validation (LOO)
+  - Enabling group invariance estimations with different constraint specifications
+   
 ## Installation
 
 To install this package from source:
