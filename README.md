@@ -11,7 +11,7 @@
 
 ## Features of the package
 
-  - Estimating log-linear cognitive diagnosis model (LCDM) and a variety of widely-used models subsumed
+  - Estimating log-linear cognitive diagnosis model (LCDM; Henson, Templin, & Willse, 2009) and a variety of widely-used models subsumed
     by the LCDM, including the deterministic inputs, noisy “and” gate model (DINA; Haertel, 1989; Junker & Sijtsma, 2001; Macready & Dayton, 1977), the deterministic input, noisy “or” gate model (DINO;Templin & Henson, 2006), the deterministic “and” gate model (NIDA; Junker & Sijtsma, 2001), the compensatory reparameterized unified model (CRUM; Hartz, 2002) as well as the noncompensatory
 reduced reparameterized unified model (NCRUM;DiBello, Stout, & Roussos, 1995) for dichotomous responses
   - Specifying customized prior distributions for parameters
