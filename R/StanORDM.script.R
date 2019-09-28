@@ -237,15 +237,22 @@ StanORDM.script<-function(Qmatrix,scale.num,save.path=getwd(),save.name="ORDM_un
   vector[Ni] log_lik[Np];
   vector[Ni] contributionsI;
   matrix[Ni,Nc] contributionsIC;
+ matrix[Ni,Nc] posteriorIC;
+ matrix[Np,Nc] posteriorPC;
+
+
+
   //Posterior
   for (iterp in 1:Np){
     for (iteri in 1:Ni){
       for (iterc in 1:Nc){
         contributionsI[iteri]= categorical_lpmf(Y[iterp,iteri]| softmax(((PImat[iteri,iterc]))));
         contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+        posteriorIC[iteri,iterc]=contributionsI[iteri];
       }
       log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
+    for (iterc in 1:Nc){posteriorPC[iterp,iterc]=prod(exp(posteriorIC[,iterc]));}
   }
   }
   '

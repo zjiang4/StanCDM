@@ -24,6 +24,14 @@ StanLCDM_gC.script<-function(Qmatrix,time.vector,quad.structure=F,variance.equal
   attrPosteriorSamplingStan<-paste(attrPosteriorSamplingStan      ,"; \n")
   
   
+  defineA<-paste(paste(paste('matrix[Np,No] A',c(1:Na),sep=''),";",sep=''))
+  defineAlpha<-paste(paste(paste('matrix[Np,No] Alpha',c(1:Na),sep=''),";",sep=''))
+  
+  
+  
+  defineAThreshold<-paste(paste("real <lower=0, upper=1> AThres",1:Na,sep=""),"[No];",sep='')
+  AThresholdPrior<-paste(paste(" AThres",1:Na,sep=''),"~beta(2,2);",sep="")
+  
   ####0617update: New parameters for GC#########
   occasion.num<-length(time.vector)
   group.num<-occasion.num
@@ -116,7 +124,7 @@ StanLCDM_gC.script<-function(Qmatrix,time.vector,quad.structure=F,variance.equal
   out[[5]]<-intercept
   OUTPUT<-out
   nclass<-ncol(OUTPUT[[1]]);Nc<-nclass
-  #Produce kernel expressions across items and attributes
+   #Produce kernel expressions across items and attributes
   Kernel.exp<-OUTPUT[[1]]
   Kernel.exp.detect<-OUTPUT[[1]] #052719updates
   Kernel.exp.LCDM<-OUTPUT[[1]] #052719updates
@@ -126,11 +134,8 @@ StanLCDM_gC.script<-function(Qmatrix,time.vector,quad.structure=F,variance.equal
       Kernel.exp.detect[i,j]<-NA} #052719updates
     }
   }
-  for (i in 1:nrow(OUTPUT[[1]])){ #052719updates
-    theClosestEffect<-which(is.na(Kernel.exp.detect[i,]))[1] #052719updates
-    useToReplaceLonger<-Kernel.exp[i,theClosestEffect] #052719updates
-    Kernel.exp.LCDM[i,is.na(Kernel.exp.detect[i,])]<-useToReplaceLonger #052719updates
-  } #052719updates
+ 
+  Kernel.exp.LCDM<-Kernel.exp
   
   #Monotonicity constraint in terms of the interaction terms of the item effects
   Constrain.List1<-NULL
@@ -239,6 +244,8 @@ StanLCDM_gC.script<-function(Qmatrix,time.vector,quad.structure=F,variance.equal
   for(j in 1:nr){
     aftAttributeKernel[j]<-paste('Eta[',j,",itero][iterp]=",aftAttributeKernel[j],";",sep='')
   }
+  
+  aftAttributeKernel<-str_replace_all(aftAttributeKernel,"A","Alpha")
   ############################################################
   #061819update:Parameter definition
   ############################################################
@@ -269,23 +276,21 @@ StanLCDM_gC.script<-function(Qmatrix,time.vector,quad.structure=F,variance.equal
 }'
 
   parameter.block<-paste("\nparameters{\n
-
-    real Zeta[Np,Nz];
-    
-    real Theta[Np,No];",
-
-    '\n',
-    paste(paste('int A',1:nc,'[Np,No];',sep=''),collapse = '\n'),
-    '\n',
-    paste(itemParmStan,collapse='\n'),
-    '\ncov_matrix[Nz] Sigma;',
-    '\nvector[Nz] Mu;',
-    #R commend
-    if(variance.equal){
-      '\nreal <lower=0,upper=100> ResVec;'
-    }else{
-      '\nreal <lower=0,upper=100> ResMat[No];'
-    },"}")
+                         matrix[Np,Nz] Zeta;
+                         matrix[Np,No] Theta;",
+                         '\n',
+                         paste(defineAThreshold,collapse='\n'),
+                         '\n',
+                         paste(itemParmStan,collapse='\n'),
+                         '\n',
+                         '\ncov_matrix[Nz] Sigma;',
+                         '\nvector[Nz] Mu;',
+                         #R commend
+                         if(variance.equal){
+                           '\nreal <lower=0,upper=100> ResVec;'
+                         }else{
+                           '\nreal <lower=0,upper=100> ResMat[No];'
+                         },"}")
   
   transformedParm.block<-'
   transformed parameters{
@@ -298,30 +303,55 @@ StanLCDM_gC.script<-function(Qmatrix,time.vector,quad.structure=F,variance.equal
   identity_Mu =diag_matrix(rep_vector(10,Nz)); 
   }
   '  
+  ######################################################################################
+  
+  ######################################################################################
+  if(variance.equal){
+    ResPrior<-'\nResVec~exponential(.1);'
+  }else{
+    ResPrior<-'\nResMat~exponential(.1);'
+  }
+  
+  AnAlpha_model<-c(paste(paste("A",1:Na,sep=""),  "[iterp,itero]= inv_logit(Beta0[1]+Beta1[1]*Theta[iterp,itero]) ;\n",sep='')
+                   ,paste(paste("Alpha",1:Na,sep=""),  "[iterp,itero]=ceil(fdim(A1[iterp,itero],AThres1[itero]));\n",sep=''))
+  
+  
+  
+  
   model.block<-paste(
-    "model{\n
-    vector[Np] Eta[Ni,No];
-    ",
-    
+    "model{\n",
+    paste(defineAlpha,collapse='\n'),
+    "\n",
+    paste(defineA,collapse='\n'),
+    "\n",
+    "vector[Np] Eta[Ni,No];",
+    "\n",
     paste(Parmprior,collapse =''),
     "Sigma~inv_wishart(Nz,identity_Sigma);
     Mu~multi_normal(zeros,identity_Mu);",
     '\n',
-    if(variance.equal){
-      '\nResVec~exponential(.1);'
-    }else{
-      '\nResMat~exponential(.1);'
-    },
+    paste(AThresholdPrior,collapse ='\n'),
+    ResPrior,
     '\n',
     "for (iterp in 1:Np){
     Zeta[iterp,] ~ multi_normal(Mu, Sigma);
     }",
 "\n",
+
+
+"for (iterp in 1:Np){
+for(itero in 1:No){\n
+",
+paste("  ",AnAlpha_model,collapse ='  '),
+"  }\n
+}\n
+",
 "for (iterp in 1:Np){\n
 for( itero in 1:No){\n ",
 paste(aftAttributeKernel,collapse ='\n'),
 " \n  }\n
 }\n ",
+
 if(!quad.structure){
   if(variance.equal){
     'for (iterp in 1:Np){
@@ -334,7 +364,7 @@ if(!quad.structure){
     for(itero in 1:No){
     Theta[iterp,itero]~normal(Zeta[iterp,1]+Zeta[iterp,2]*TimeVec[itero],ResMat[itero]);
     }
-    }'
+}'
     
     }
 }else{
@@ -352,15 +382,8 @@ if(!quad.structure){
   }'
   }
   
-  },
-'\n',
-"for (iterp in 1:Np){
-for(itero in 1:No){\n
-",
-paste("  ",attrSamplingStan,collapse ='  '),
-"  }\n
-}\n
-",
+},
+"\n",
 "
 for (iterr in 1:Nr){
 for (iteri in 1:Ni){
@@ -391,7 +414,7 @@ Y[iterr,iteri] ~ bernoulli_logit(Eta[iteri,OccasionID[iterr]][SubjectID[iterr]])
     for(itero in 1:No){
     Theta[iterp,itero]<-normal_rng(Zeta[iterp,1]+Zeta[iterp,2]*TimeVec[itero],ResMat[itero]);
     }
-}'
+    }'
     
     }
   }else{
@@ -408,64 +431,42 @@ Y[iterr,iteri] ~ bernoulli_logit(Eta[iteri,OccasionID[iterr]][SubjectID[iterr]])
     }
     }'
   }}
-    
-    #####################End: For posterior###################################################
-    ##########################################################################################
+  
+  #####################End: For posterior###################################################
+  ##########################################################################################
   
   generatedQuant.block <- paste("\n
-  generated quantities {
-  vector[Nz] Zeta[Np];
-  vector[Np] Eta[Ni,No];
-  matrix[Np,No] Theta;
-  real log_lik[Nr,Ni];
-  matrix[Nz,Nz] identity_Sigma;
-  matrix[Nz,Nz] identity_Mu;
+                                generated quantities {",
+                                "\n",
+                                paste(defineAlpha,collapse='\n'),
+                                '\n',
+                                paste(defineA,collapse='\n'),
+                                "\n",
+                                "vector[Np] Eta[Ni,No];
+                                real log_lik[Nr,Ni];
+                                ",
+                                "\n",
                                 
-  zeros = rep_vector(0, Nz);
-  identity_Sigma =diag_matrix(rep_vector(1.0,Nz)); 
-  identity_Mu =diag_matrix(rep_vector(10,Nz));                  
-
-  ncov_matrix[Nz] Sigma;
-  nvector[Nz] Mu;",
-   ResPosterior,
-                                
-  '\n',
-  paste(paste('int A',1:nc,'[Np,No];',sep=''),collapse = '\n'),
-  '\n',
-  
-  
-  "Sigma<-inv_wishart_rng(Nz,identity_Sigma);
-    Mu<-multi_normal_rng(zeros,identity_Mu);",
-  '\n',
-   ResPosteriorSampling,
-  '\n',
-  "for (iterp in 1:Np){
-  Zeta[iterp]<-multi_normal_rng(Mu, Sigma);
-}"
-  
-  
-  ,
-  "for (iterp in 1:Np){
-      for(itero in 1:No){\n
-  ",
-  paste("  ",attrPosteriorSamplingStan,collapse ='  '),
-  "  }\n
-  }\n
-  ",
-  ThetaPosteriorSampling
-  ,
-   "for (iterp in 1:Np){\n
-       for( itero in 1:No){\n ",
-       paste(aftAttributeKernel,collapse ='\n'),
+                                "for (iterp in 1:Np){
+                                for(itero in 1:No){\n
+                                ",
+                                paste("  ",AnAlpha_model,collapse ='  '),
+                                "  }\n
+                                }\n
+                                ",                               
+                                '\n',
+                                "for (iterp in 1:Np){\n
+                                for( itero in 1:No){\n ",
+                                paste(aftAttributeKernel,collapse ='\n'),
                                 " \n  }\n
-}\n ",
+                                }\n ",
 
-  "for (iterr in 1:Nr){
-  for (iteri in 1:Ni){
-  log_lik[iterr,iteri] = bernoulli_log(Y[iterr,iteri],(Eta[iteri,OccasionID[iterr]][SubjectID[iterr]]));
-  }
-  }
-  }",sep="")
+                                "for (iterr in 1:Nr){
+                                for (iteri in 1:Ni){
+                                log_lik[iterr,iteri] = bernoulli_log(Y[iterr,iteri],inv_logit(Eta[iteri,OccasionID[iterr]][SubjectID[iterr]]));
+                                }
+                                }
+                                }",sep="")
   
   if (.Platform$OS.type == "unix") {
     filename = paste(paste(save.path,save.name,sep='/'),'.stan',sep='')

@@ -212,11 +212,18 @@ parameters{
   #Generated Quantities Specification
   generatedQuantities.spec<-'
   \n
+generatedQuantities.spec<-'
+  \n
 generated quantities {
 
  vector[Ni] log_lik[Np];
  vector[Ni] contributionsI;
  matrix[Ni,Nc] contributionsIC;
+ 
+ matrix[Ni,Nc] posteriorIC;
+ matrix[Np,Nc] posteriorPC;
+
+
 
  //Posterior
  for (iterp in 1:Np){
@@ -226,10 +233,12 @@ generated quantities {
           contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
        else
            contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
-          contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+       contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+       posteriorIC[iteri,iterc]=contributionsI[iteri];
       }
       log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
+   for (iterc in 1:Nc){posteriorPC[iterp,iterc]=prod(exp(posteriorIC[,iterc]));}
   }
 }
 '

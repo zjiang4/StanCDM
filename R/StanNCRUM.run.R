@@ -59,7 +59,7 @@ StanNCRUM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd()
   if(is.na(control.list)){control.list<-list(adapt_delta=0.82)}
   if(is.na(script.path)==T){
     options(warn=-1)
-    StanLCDM.script(Qmatrix,save.path=save.path,save.name=save.name)
+    StanNCRUM.script(Qmatrix,save.path=save.path,save.name=save.name)
     if (.Platform$OS.type == "unix") {
       filename = paste(paste(save.path,save.name,sep='/'),'.stan',sep='')
     }else{

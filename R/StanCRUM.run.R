@@ -55,7 +55,7 @@ StanCRUM.run<-function(Qmatrix,response.matrix,script.path=NA,save.path=getwd(),
   if(is.na(control.list)){control.list<-list(adapt_delta=0.82)}
   if(is.na(script.path)==T){
     options(warn=-1)
-    StanDINA.script(Qmatrix,save.path=save.path,save.name=save.name)
+    StanCRUM.script(Qmatrix,save.path=save.path,save.name=save.name)
     script.path<-paste(paste(save.path,save.name,sep='/'),'.stan',sep='')
     options(warn=0)
     compiled_model<-stan_model(script.path)

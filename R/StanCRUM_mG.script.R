@@ -432,6 +432,11 @@ StanCRUM_mG.script<-function(Qmatrix,
   vector[Ni] log_lik[Np];
   vector[Ni] contributionsI;
   matrix[Ni,Nc] contributionsIC;
+
+  matrix[Ni,Nc] posteriorIC;
+  matrix[Np,Nc] posteriorPC;
+
+
   //Posterior
   for (iterp in 1:Np){
     for (iteri in 1:Ni){
@@ -442,9 +447,11 @@ StanCRUM_mG.script<-function(Qmatrix,
                                     ,PImat.likelihood0,
                                     '
           contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+          posteriorIC[iteri,iterc]=contributionsI[iteri];
         }
       log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
+    for (iterc in 1:Nc){posteriorPC[iterp,iterc]=prod(exp(posteriorIC[,iterc]));}
   }
   }
   ',sep='')}else{
@@ -454,6 +461,11 @@ StanCRUM_mG.script<-function(Qmatrix,
     vector[Ni] log_lik[Np];
     vector[Ni] contributionsI;
     matrix[Ni,Nc] contributionsIC;
+
+    matrix[Ni,Nc] posteriorIC;
+    matrix[Np,Nc] posteriorPC;
+
+
     //Posterior
     for (iterp in 1:Np){
       for (iteri in 1:Ni){
@@ -462,10 +474,12 @@ StanCRUM_mG.script<-function(Qmatrix,
                                        PImat.likelihood1,'\n',
                                        '        else',
                                        PImat.likelihood0,'\n',
-                                       "   ",IC.generatedquantities,'\n
+                                       "   ",IC.generatedquantities,'\n',
+                             '          posteriorIC[iteri,iterc]=contributionsI[iteri];','\n
       }\n',
                                        '     log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
      }
+     for (iterc in 1:Nc){posteriorPC[iterp,iterc]=prod(exp(posteriorIC[,iterc]));}
    }
    }
       ',

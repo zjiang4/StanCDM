@@ -17,6 +17,7 @@
 StanPrior.update<-function(priorUpdate.matrix,script.path,save.path=getwd(),save.name=NA){
   Install.package("plyr")
   Install.package('stringr')
+  options(warn=-1)
   if(is.na(save.name)){
     saveUpdate.name=paste(format(Sys.time(), "%a%b%Y"),'_priorUpdate.stan',sep='')}else{
       saveUpdate.name=paste(paste(save.name,sep='/'),'.stan',sep='')
@@ -27,8 +28,7 @@ StanPrior.update<-function(priorUpdate.matrix,script.path,save.path=getwd(),save
                                                                                                                     priorUpdate.matrix[i,2],
                                                                                                                     ';//UpdatedPrior ')
   }
+  options(warn=0)
   filename = paste(paste(save.path,saveUpdate.name,sep='/'),sep='')
   writeLines(readStan.script,filename)
 }
-
-

@@ -258,24 +258,33 @@ model.spec<-model.spec[!startsWith(str_remove_all(model.spec," "),"~")]
 generatedQuantities.spec<-'
   \n
 generated quantities {
-  vector[Ni] log_lik[Np];
-  vector[Ni] contributionsI;
-  matrix[Ni,Nc] contributionsIC;
-  //Posterior
-  for (iterp in 1:Np){
-    for (iteri in 1:Ni){
-      for (iterc in 1:Nc){
-        if (Y[iterp,iteri] == 1)
+
+ vector[Ni] log_lik[Np];
+ vector[Ni] contributionsI;
+ matrix[Ni,Nc] contributionsIC;
+ 
+ matrix[Ni,Nc] posteriorIC;
+ matrix[Np,Nc] posteriorPC;
+
+
+
+ //Posterior
+ for (iterp in 1:Np){
+   for (iteri in 1:Ni){
+     for (iterc in 1:Nc){
+       if (Y[iterp,iteri] == 1)
           contributionsI[iteri]=bernoulli_lpmf(1|PImat[iteri,iterc]);
-        else
-          contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
-        contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+       else
+           contributionsI[iteri]=bernoulli_lpmf(0|PImat[iteri,iterc]);
+       contributionsIC[iteri,iterc]=log(Vc[iterc])+contributionsI[iteri];
+       posteriorIC[iteri,iterc]=contributionsI[iteri];
       }
       log_lik[iterp,iteri]=log_sum_exp(contributionsIC[iteri,]);
     }
+   for (iterc in 1:Nc){posteriorPC[iterp,iterc]=prod(exp(posteriorIC[,iterc]));}
   }
 }
-  '
+'
 
 if (.Platform$OS.type == "unix") {
   filename = paste(paste(save.path,save.name,sep='/'),'.stan',sep='')

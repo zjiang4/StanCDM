@@ -18,7 +18,6 @@ StanPrior.show<-function(script.path){
   Install.package("plyr")
   Install.package('stringr')
   readStan.script<- readLines(script.path)
-  readStan.script<-readStan.script[grep("Prior",readStan.script):grep("Likelihood",readStan.script)]
   readStan.script<-readStan.script[grep("~",readStan.script)]
   readStan.script<-str_remove_all(readStan.script," ")
   readStan.script<-str_remove_all(readStan.script,";")
