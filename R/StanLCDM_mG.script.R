@@ -189,7 +189,7 @@ StanLCDM_mG.script<-function(Qmatrix,
   #############################################################
 
   Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))  #############################################################
+  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,5)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))  #############################################################
 
 
   Kernel.exp.LCDM.groupName<-paste("Kernel.exp.LCDM_g",c(1:group.num),sep='')
@@ -287,7 +287,7 @@ StanLCDM_mG.script<-function(Qmatrix,
   ##########060319update: Multiple Group End###################
   #############################################################
   Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
+  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,5)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
   update.Parmprior<-Parmprior
   fix.Parmprior<-NULL
 
@@ -309,7 +309,7 @@ StanLCDM_mG.script<-function(Qmatrix,
     }
   }
   update.Parmprior.multiGroup<-unique(update.Parmprior.multiGroup)
-  update.Parmprior.multiGroup<-c("   //Prior\n",paste('   ',fixedParmName,'~normal(0,15)',';\n',sep=''),update.Parmprior.multiGroup )
+  update.Parmprior.multiGroup<-c("   //Prior\n",paste('   ',fixedParmName,'~normal(0,5)',';\n',sep=''),update.Parmprior.multiGroup )
   if(class.equal){
     update.Parmprior.multiGroup<-c(update.Parmprior.multiGroup,paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='') )
   }else{

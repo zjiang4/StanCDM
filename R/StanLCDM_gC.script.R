@@ -255,7 +255,7 @@ StanLCDM_gC.script<-function(Qmatrix,time.vector,quad.structure=F,variance.equal
                   'real Beta0[Na];',
                   'real Beta1[Na];')
   #cat(paste(itemParmStan,"\n"))
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',c(itemParmName,"Beta0" ,"Beta1" ),'~normal(0,15)',';\n',sep='')))
+  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',c(itemParmName,"Beta0" ,"Beta1" ),'~normal(0,5)',';\n',sep='')))
   
   
   

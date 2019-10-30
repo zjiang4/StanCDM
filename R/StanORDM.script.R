@@ -188,7 +188,7 @@ StanORDM.script<-function(Qmatrix,scale.num,save.path=getwd(),save.name="ORDM_un
   Unconstrain.List<-paste('  real',itemParmName[-(1:numMainEffect)],';\n ')
 
   Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
+  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',itemParmName,'~normal(0,5)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
   #Likelihood Stan code
   Likelihood<-'
   \n

@@ -169,7 +169,7 @@ StanCRUM.script<-function(Qmatrix,save.path=getwd(),save.name="CRUM_uninf"){
     }
   }
   Modelcontainer<-paste('   vector[Nc] contributionsC;\n','    vector[Ni] contributionsI;\n\n',sep='')
-  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',c(itemParmName[1:numMainEffect],intercept),'~normal(0,15)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
+  Parmprior<-paste(c(paste('   //Prior\n'),paste('   ',c(itemParmName[1:numMainEffect],intercept),'~normal(0,5)',';\n',sep=''),paste('   Vc~dirichlet(rep_vector(2.0, Nc));',sep='')))
   ####################053119update END  ##############
 
   #Likelihood Stan code
