@@ -210,8 +210,7 @@ parameters{
   model.spec<-model.spec[!startsWith(str_remove_all(model.spec," "),"~")]
 
   #Generated Quantities Specification
-  generatedQuantities.spec<-'
-  \n
+
 generatedQuantities.spec<-'
   \n
 generated quantities {
