@@ -33,7 +33,7 @@
 #' summary(mod1)
 #' }
 
-
+ 
 StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
 
   #Load packages
