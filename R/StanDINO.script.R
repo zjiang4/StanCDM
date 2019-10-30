@@ -284,11 +284,9 @@ StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
   model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,update.Parmprior,Likelihood),sep=''),'\n}',sep=''))
   model.spec<-model.spec[!startsWith(str_remove_all(model.spec," "),"~")]
   #Generated Quantities Specification
-  generatedQuantities.spec<-'
-  \n
+ 
   if(class.equal){
     generatedQuantities.spec<-paste('
-  \n
   generated quantities {
   vector[Ni] log_lik[Np];
   vector[Ni] contributionsI;
@@ -317,7 +315,7 @@ StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
   }
   ',sep='')}else{
     generatedQuantities.spec <- paste( '
-    \n
+
     generated quantities {
     vector[Ni] log_lik[Np];
     vector[Ni] contributionsI;
