@@ -37,7 +37,8 @@ To install this package from source:
 ``` r
 # install.packages("devtools")
 devtools::source_url("https://raw.githubusercontent.com/zjiang4/StanDCM/master/R/StanDCM.R")
-# To use it in your local machines, please save the StanDCM.R to your local drives, and use "source(/...StanDCM.R)" in R to execute the package functions 
+# To use it in your local machines, please save the StanDCM.R to your local drives, and use "source(.../StanDCM.R)" in R to execute the package functions
+# For example, if the StanDCM.R is saved in "C:\\Myfile", users should type source("C:/Myfile/StanDCM.R") in R
 ```
 
 The parametric version of DCM R package named GDINA can be found in R CRAN at
