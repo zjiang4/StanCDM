@@ -36,7 +36,7 @@ To install this package from source:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("zjiang4/StanDCM")
+devtools::source_url("https://github.com/zjiang4/StanDCM/blob/master/R/StanDCM.R?raw=TRUE")
 ```
 
 The parametric version of DCM R package named GDINA can be found in R CRAN at
