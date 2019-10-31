@@ -9,22 +9,6 @@
 #  write("\n#SEPERATION#", "StanDCM.txt",append = T)
 #}
 
-#SEPERATION#
-#' @title Generate data list
-#'
-#' @description
-#' The StanLCDM.script Function to automate Stan code geneartion for LCDMs with binary resposnes
-#'
-#' @param Qmatrix the Q-matrix specified for the LCDM
-#' @param response.matrix save the .stan file to somewhere; the default path is getwd()
-#' @param GroupID name the .stan
-#' @return a. stan file saved at the specified path
-#'
-#' @author {Zhehan Jiang, University of Alabama, \email{zjiang17@@ua.edu}}
-#' @export
-#loading needed packages
-#load("D:\\Dropbox\\Stan\\R\\data.RData") ;Qmatrix<-cbind(Qmatrix,rep(1,9));Qmatrix[1,1]<-0
-
 
 
 Generate.datalist<-function(Qmatrix,response.matrix,GroupID=NA,SubjectID=NA,TimestampID=NA,quad.structure=F){
