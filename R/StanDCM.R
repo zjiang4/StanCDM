@@ -1,14 +1,3 @@
-#targetPath<-"\\\\libfs1\\users$\\home\\zjiang17\\My Documents\\GitHub\\StanDCM\\R\\";setwd(targetPath)
-#AllFiles<-list.files(targetPath)
-#AllFiles<-AllFiles[AllFiles!="StanDCM.R"]
-
-#for(i in 1:length(AllFiles)){
-  
-#  line <- readLines(AllFiles[i])
-#  write(line, "StanDCM.txt",append = T)
-#  write("\n#SEPERATION#", "StanDCM.txt",append = T)
-#}
-
 
 
 Generate.datalist<-function(Qmatrix,response.matrix,GroupID=NA,SubjectID=NA,TimestampID=NA,quad.structure=F){
