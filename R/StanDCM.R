@@ -1,6 +1,6 @@
 #targetPath<-"\\\\libfs1\\users$\\home\\zjiang17\\My Documents\\GitHub\\StanDCM\\R\\";setwd(targetPath)
 #AllFiles<-list.files(targetPath)
-#AllFiles<-AllFiles[AllFiles!="StanDCM.txt"]
+#AllFiles<-AllFiles[AllFiles!="StanDCM.R"]
 
 #for(i in 1:length(AllFiles)){
   
