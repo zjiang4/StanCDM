@@ -26,7 +26,7 @@
 
 
 StanDCM.ppmc <- function(stan.model, response.matrix, n.sim = 6000, n.burnin = 20, plot.option=FALSE) {
-  Install.package(c("Rlab", "MCMCpack", "tidyr", "dplyr", "pbapply"))
+  Install.package(c("Rlab", "MCMCpack", "tidyr", "dplyr", "pbapply","ggplot2"))
   if(plot.option == TRUE) Install.package("ggplot2")
 
   mod1 <- stan.model
