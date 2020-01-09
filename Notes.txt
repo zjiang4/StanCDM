@@ -1,0 +1,3 @@
+library(CDM)
+options(repos = getOption("repos")["CRAN"])
+devtools::install_github("zjiang4/StanDCM")
