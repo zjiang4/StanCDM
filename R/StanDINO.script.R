@@ -284,7 +284,7 @@ StanDINO.script<-function(Qmatrix,save.path=getwd(),save.name="DINO_uninf"){
   model.spec<-paste(c('\nmodel {\n',paste(c(Modelcontainer,update.Parmprior,Likelihood),sep=''),'\n}',sep=''))
   model.spec<-model.spec[!startsWith(str_remove_all(model.spec," "),"~")]
   #Generated Quantities Specification
- 
+ class.equal=T
   if(class.equal){
     generatedQuantities.spec<-paste('
   generated quantities {
