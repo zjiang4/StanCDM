@@ -23,11 +23,15 @@ StanPrior.update<-function(priorUpdate.matrix,script.path,save.path=getwd(),save
       saveUpdate.name=paste(paste(save.name,sep='/'),'.stan',sep='')
     }
   readStan.script<- readLines(script.path)
-  for(i in 1:nrow(priorUpdate.matrix)){
-    readStan.script[which(str_remove_all(str_remove_all(readStan.script," "),";")==priorUpdate.matrix[i,1])]<-paste("   ",
-                                                                                                                    priorUpdate.matrix[i,2],
-                                                                                                                    ';//UpdatedPrior ')
-  }
+for(i in 1:nrow(priorUpdate.matrix)){
+  beReplaced<-readStan.script[str_detect(str_remove_all(str_remove_all(readStan.script," "),";"),priorUpdate.matrix[i,1])][grep("~",readStan.script[str_detect(str_remove_all(str_remove_all(readStan.script," "),";"),priorUpdate.matrix[i,1])])
+  ]
+  beReplaced<-str_remove_all(str_remove_all(beReplaced," "),";")
+  
+  readStan.script[which(str_remove_all(str_remove_all(readStan.script," "),";")==beReplaced)]<-paste("   ",
+                                                                                                    paste(priorUpdate.matrix[i,1],priorUpdate.matrix[i,2],sep="~")  ,
+                                                                                                                  ';//UpdatedPrior ')
+}
   options(warn=0)
   filename = paste(paste(save.path,saveUpdate.name,sep='/'),sep='')
   writeLines(readStan.script,filename)
